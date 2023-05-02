@@ -132,9 +132,28 @@ def get_p12_same_support(
     return arr_p1, arr_p2
 
 
-# Retrieve all books in a dictionary of structure
-# { author/subject : [list of book ids] }
-def get_all_books(ids_dict):
+def get_all_books(ids_dict, level = 'counts'):
+    '''
+    Retrieves all books at the specified level (tokens, counts).
+
+    Parameters
+    ----------
+    ids_dict : dictionary
+        Dictionary with structure { author/subject : [list of book ids] }
+    
+    OPTIONAL:
+    level : string
+        Specifies the granularity of the returned texts
+        - 'counts', dict(word,count) [default]
+        - 'tokens', list of tokens (str)
+        - 'text', single str
+
+    Returns
+    -------
+     : dict
+        Dictionary of same structure, but with ids replaced with the 
+        texts at the desired granularity.
+    '''
     key_list = list(ids_dict.keys()).copy()
 
     books_dict = {}
@@ -145,7 +164,7 @@ def get_all_books(ids_dict):
         ids = ids_dict[key]
         for id in ids:
             try:
-                new_book = get_book(id)
+                new_book = get_book(id, level = level)
                 new_book_list.append(new_book)
             except:
                 continue
@@ -155,13 +174,32 @@ def get_all_books(ids_dict):
     return books_dict
 
 
-# Retrieve all books in a list
-def get_all_books_from_list(ids_list):
+def get_all_books_from_list(ids_list, level = 'counts'):
+    '''
+    Retrieves all books at the specified level (tokens, counts).
+
+    Parameters
+    ----------
+    ids_list : list
+        List of book ids
+    
+    OPTIONAL:
+    level : string
+        Specifies the granularity of the returned texts
+        - 'counts', dict(word,count) [default]
+        - 'tokens', list of tokens (str)
+        - 'text', single str
+
+    Returns
+    -------
+     : dict
+        List of texts at the desired granularity.
+    '''
     books_not_found = 0
     new_book_list = []
     for id in ids_list:
         try:
-            new_book = get_book(id)
+            new_book = get_book(id, level = level)
             new_book_list.append(new_book)
         except:
             books_not_found += 1

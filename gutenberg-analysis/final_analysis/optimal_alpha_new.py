@@ -1,3 +1,29 @@
+'''
+This code is for computing P(X<Y) across a given range of alpha values.
+
+Input: 
+One the command line, the user gives the following inputs:
+    1. Either the string 'new' or 'new_controlled'. 'new' refers to UNCONTROLLED subcorpora 
+       (i.e. we do not control for  confounding between author, subject and time period), while 
+       'new_controlled' refers to CONTROLLED subcorpora. Refer to the paper for more details.
+    2. Task (either 'author', 'subject' or 'time')
+    3. Task number (number between 11 and 20). This indicates which subcorpora to perform the
+       calculations on.
+    4. Optional argument, either 'weights' or 'resample'. 'weights' indicates that we want to 
+       weight the two word frequency distributions proportional to their length when computing 
+       JSD (see src/jsd.py to see how this is implemented). 'resample' indicates we want to 
+       resample the word frequency distributions before computing JSD.
+
+Output:
+The output is a list, where each value is P(X < Y) for a particular alpha.
+This list is stored in a pickle file that has the name:
+    optimal_alpha_{additional_argument}_{suffix}_{task}{task_number}
+        additional_argument : either 'weights', 'resample' or empty
+        suffix : either 'new' or 'new_controlled'
+        task : 'author', 'subject' or 'time'
+        task_number : number between 11 and 20
+'''
+
 # Importing relevant packages
 import numpy as np
 import pandas as pd
@@ -7,11 +33,6 @@ import pickle
 from collections import Counter
 import matplotlib.pyplot as plt
 
-# %matplotlib inline
-
-# %load_ext autoreload
-# %autoreload 2
-
 ## path to the downloaded gutenberg corpus
 path_gutenberg = os.path.join(os.pardir,os.pardir,'gutenberg')
 
@@ -20,10 +41,6 @@ src_dir = os.path.join(os.pardir,'src')
 sys.path.append(src_dir)
 from data_io import get_book
 
-import re
-import random
-
-
 # Accessing the metadata
 sys.path.append(os.path.join(path_gutenberg,'src'))
 from metaquery import meta_query
@@ -31,7 +48,7 @@ mq = meta_query(path=os.path.join(path_gutenberg,'metadata','metadata.csv'), fil
 
 from itertools import combinations
 from data_io import get_book, get_p12_same_support
-from metric_eval import esample_book, prob_x_less_than_y_freq_new, optimal_alpha_test_freq_new
+from metric_eval import optimal_alpha_test_freq_new
 from jsd import jsdalpha
 
 
@@ -76,6 +93,6 @@ else:
     output_file_path = f'../output_files/optimal_alpha_{suffix}_{task}{task_num}.pickle'
 
 
-# Save the results
+# Save the results in a pickle file
 with open(output_file_path, 'wb') as f:
     pickle.dump(final_result, f)
