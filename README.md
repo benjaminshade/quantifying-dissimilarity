@@ -3,7 +3,7 @@
 
 This repository contains all the code used to produce the numerical results of the paper [Quantifying the Dissimilarity of Texts](https://www.mdpi.com/2078-2489/14/5/271).
 
-A static version of the code is available at https://doi.org/10.5281/zenodo.7861675.
+A static version of the code is available at https://doi.org/10.5281/zenodo.7888585. 
 
 ### Repository structure
 This repository contains two key directories:
